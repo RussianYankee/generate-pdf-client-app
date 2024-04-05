@@ -1,47 +1,40 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="pdf-form">
+    <input type="text" name="name" placeholder="Customer's name" v-model="formData.name"/>
+    <input type="number" name="receiptID" placeholder="Receipt ID" v-model="formData.receiptID"/>
+    <input type="number" name="price1" placeholder="Price 1" v-model="formData.price1"/>
+    <input type="number" name="price2" placeholder="Price 2" v-model="formData.price2"/>
+    <button @click="createAndDownloadPdf">Create & Download PDF</button>
+  </div>
 </template>
 
+<script setup lang="ts">
+import axios from 'axios';
+import { ref } from 'vue'
+//import { saveAs } from 'file-saver';
+
+const formData = ref({
+  name: "",
+  receiptID: 123,
+  price1: 333.44,
+  price2: 149.99
+})
+
+function createAndDownloadPdf() {
+  axios.post('/create-pdf', formData)
+}
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
+#app{
+  height: 100%;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.pdf-form{
+  display: flex;
+  flex-direction: column;
+  min-width: 450px;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
 }
 </style>
